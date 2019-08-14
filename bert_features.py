@@ -23,7 +23,6 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 
-text_path = "./dataset_dd.json"
 tokenizer = BertTokenizer.from_pretrained('./pretrained_model_bert', do_lower_case=True)
 
 
