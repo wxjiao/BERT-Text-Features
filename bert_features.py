@@ -1,5 +1,5 @@
 #########################################################################################
-# Script name: mustard_bert.py
+# Script name: bert_features.py
 # Author: Jiao Wenxiang
 # Date: 2019-08-12
 # Function:
@@ -16,14 +16,14 @@ import pickle
 import jsonlines
 import simplejson as json
 import numpy as np
-from mustard_extract_features import BertTokenizer,extract_features
+from extract_functions import BertTokenizer,extract_features
 
 
 import logging
 logging.basicConfig(level=logging.INFO)
 
 
-text_path = "./mustard_dd.json"
+text_path = "./dataset_dd.json"
 tokenizer = BertTokenizer.from_pretrained('./pretrained_model_bert', do_lower_case=True)
 
 
@@ -44,6 +44,8 @@ def saveToPickle(path, object):
 
 
 # Recosntruct utterance from the tokens
+# Save the transcripts of each video into a .txt file
+# Call the extract_features function to extract top 4 layers' representation, and save into a .jsonl file
 def reconUtter(dict_path, input_dir, output_dir):
 	data_dict = loadFrJson(dict_path)
 	if not os.path.isdir(input_dir):
@@ -68,8 +70,8 @@ def reconUtter(dict_path, input_dir, output_dir):
 		extract_features(input_file=input_file, output_file=output_file, bert_model="./pretrained_model_bert", do_lower_case=True)
 
 
-# Align BERT tokens to our tokens and initialize BERT features
-def alignTokens(dict_path, bert_dir, feat_name="mustard_bert.pt"):
+# Align BERT tokens to our tokens and initialize BERT features for our tokens
+def alignTokens(dict_path, bert_dir, feat_name="dataset_bert.pt"):
 	data_dict = loadFrJson(dict_path)
 	for vid,vdata in tqdm.tqdm(data_dict.items(), ncols=100, ascii=True):
 		bertname = vid + "_bert.jsonl"
@@ -85,11 +87,12 @@ def alignTokens(dict_path, bert_dir, feat_name="mustard_bert.pt"):
 					bert_tokens = tokenizer.tokenize(rc_phrase)
 					end_idx = start_idx + len(bert_tokens)
 					features = obj['features'][start_idx:end_idx]
-					feat_our_token = []
+					# Indexed tokens to check if the alignment is correct
 					feat_real_tokens = []
 					# Features of tokens by BertTokenizer
+					feat_our_token = []
 					for feature in features:
-						feat_real_tokens.append(feature["token"])           # To check if the indexes of features are right
+						feat_real_tokens.append(feature["token"])
 						# Feature of each bert token
 						feat_bert_token = []
 						# 4 layers
@@ -103,11 +106,11 @@ def alignTokens(dict_path, bert_dir, feat_name="mustard_bert.pt"):
 
 
 def main():
-	dict_path = "./MUStARD/mustard_dd.json"
-	input_dir = "./MUStARD/bert_input"
-	output_dir = "./MUStARD/bert_output"
-	# reconUtter(dict_path=dict_path, input_dir=input_dir, output_dir=output_dir)
-	alignTokens(dict_path=dict_path, bert_dir=output_dir, feat_name="./MUStARD/mustard_bert.pt")
+	dict_path = "./Dataset/dataset_dd.json"
+	input_dir = "./Dataset/bert_input"
+	output_dir = "./Dataset/bert_output"
+	reconUtter(dict_path=dict_path, input_dir=input_dir, output_dir=output_dir)
+	alignTokens(dict_path=dict_path, bert_dir=output_dir, feat_name="./Dataset/dataset_bert.pt")
 
 
 if __name__ == '__main__':
