@@ -1,13 +1,16 @@
 # BERT-Text-Features for Tokenized Transcripts from [P2FA](https://web.sas.upenn.edu/phonetics-lab/)
 
+
 ## Motivation
 **Problem**:
 
 Extracting text features from BERT can be accomplished by the provided example script [`extract_features.py`](https://github.com/huggingface/pytorch-transformers/blob/v0.6.2/examples/extract_features.py). However, the problem arises if we want to initialize the words or phrases by the tokenizers that are not integrated in BERT.
 
+
 **Scenario**:
 
 For example, in multimodal learning, it is a trend to align audios and videos to the corresponding transcripts at word-level. P2FA enables the Forced Alignment between audios and transcripts, where the transcripts are tokenized by its own tokenizer. For convinience, we call this kind of tokens as **P2FA-tokens**, which can be easily initialized by Word2vec or GloVe pre-trained word embeddings because there is no tokenizer requirements. BERT is an architecture, which means we should encode the text by its tokenizer to ensure the correct mapping between the tokens and the features.  
+
 
 **Solution**:
 
@@ -36,11 +39,13 @@ The solution for aligning the P2FA-tokens to BERT-tokens is as below:
 ['superstition,'] --> ['super'] ['##sti'] ['##tion'] [',']
 Index: [9:13)
 ```
+-------------------------------
+
 
 ## Implementation
 **Dataset**:
 
-A `dataset_dd.json' file from P2FA with a format as below:
+A `dataset_dd.json` file from P2FA with a format as below:
 ```
 {
     "1_60": {
@@ -69,6 +74,8 @@ A `dataset_dd.json' file from P2FA with a format as below:
                 ...
 }
 ```
+The .json format output can be obtained by a modified P2FA, named [p2fa-vislab](https://github.com/ucbvislab/p2fa-vislab).
+
 
 **BERT models**:
 
@@ -76,9 +83,10 @@ Though one can use cloud saved BERT models, we here show how to use locally save
 - First, we need to make a directory named `pretrained_model_bert`.
 - Download the files of a BERT model and save them into `pretrained_model_bert`.
 - Rename the filenames, taking the `bert-base-uncased` model as an example:
-  - bert-base-uncased-config.json --> bert_config.json
-  - bert-base-uncased-pytorch_model.bin --> pytorch_model.bin
-  - bert-base-uncased-vocab.txt --> vocab.txt
+  - `bert-base-uncased-config.json` --> `bert_config.json`
+  - `bert-base-uncased-pytorch_model.bin` --> `pytorch_model.bin`
+  - `bert-base-uncased-vocab.txt` --> `vocab.txt`
+
 
 **Run scripts**:
 
