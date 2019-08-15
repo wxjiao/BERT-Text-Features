@@ -43,6 +43,12 @@ Index: [9:13)
 
 
 ## Implementation
+
+**Requisites**:
+- pytorch >= 0.4.1
+- pytorch-transformers v0.6.2
+
+
 **Dataset**:
 
 A `dataset_dd.json` file from P2FA with a format as below:
