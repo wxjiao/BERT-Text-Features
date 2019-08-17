@@ -15,7 +15,7 @@ For example, in multimodal learning, it is a trend to align audios and videos to
 **Solution**:
 
 The solution for aligning the P2FA-tokens to BERT-tokens is as below:
-- For Feature Extraction: We reconstruct each utterance from P2FA-tokens and save a .txt file for each video. Then, call the `extract_features()` function from `extract_functions.py` to extract BERT features and save into a .jsonl file.
+- **Feature Extraction**: We reconstruct each utterance from P2FA-tokens and save a .txt file for each video. Then, call the `extract_features()` function from `extract_functions.py` to extract BERT features and save into a .jsonl file.
 ```
 # P2FA-tokens doesnot split abbreivations of words or punctuations
 ['you'] ['don't'] ['really'] ['believe'] ['in'] ['that'] ['superstition,'] ['do'] ['you?']
@@ -29,7 +29,7 @@ The solution for aligning the P2FA-tokens to BERT-tokens is as below:
 "you don ' t really believe in that superstition , do you ?"
 ```
 
-- For Token Alignment: We find the index range of each P2FA-token in the BERT-tokens, then use the index to fetch corresponding features from the extracted BERT features in the .jsonl file.
+- **Token Alignment**: We find the index range of each P2FA-token in the BERT-tokens, then use the index to fetch corresponding features from the extracted BERT features in the .jsonl file.
 ```
 # BERT-tokens
 ['[CLS]'] ['you'] ['don'] ["'"] ['t'] ['really'] ['believe'] ['in'] ['that'] ['super'] ['##sti'] ['##tion'] [','] ['do'] ['you'] ['?']
